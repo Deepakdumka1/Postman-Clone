@@ -210,7 +210,7 @@
 .dark-theme h1, 
 .dark-theme h3, 
 .dark-theme h4 {
-  color: var(--dark-text);
+  color: var(--light-text);
 }
 
 .dark-theme .nav-item {
@@ -236,7 +236,7 @@
 
 .dark-theme button {
   background-color: var(--dark-surface);
-  color: var(--dark-text);
+  color: white;
 }
 
 .dark-theme button:hover {
@@ -268,9 +268,153 @@
     bottom: 0;
     z-index: 100;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 240px;
   }
   
   .app-sidebar.collapsed {
     transform: translateX(-100%);
+  }
+
+  .app-header {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
+
+  /* Collections, Environments, History layout adjustments */
+  .collections-container, .environments-container, .history-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .collections-sidebar, .environments-sidebar, .history-sidebar,
+  .collections-content, .environments-content, .history-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .collections-sidebar, .environments-sidebar, .history-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+
+  .collections-layout {
+    flex-direction: column;
+  }
+
+  /* Make tables responsive */
+  .details-table, .variables-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Responsive form controls */
+  .futuristic-input-group, .new-collection-form, .new-environment-form {
+    flex-direction: column;
+  }
+  
+  .futuristic-input-with-button, .futuristic-btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .futuristic-input-with-button button,
+  .futuristic-btn-group button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  /* Environment cards grid adjustments */
+  .environments-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* History items */
+  .history-item {
+    padding: 0.75rem;
+  }
+
+  .history-method-url {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .history-url {
+    max-width: 100%;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .app-sidebar {
+    width: 100%;
+  }
+
+  .app-content {
+    padding: 0.75rem;
+  }
+
+  .component-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .component-header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .component-header-actions button {
+    width: 100%;
+  }
+
+  /* Tab adjustments */
+  .tabs-list {
+    flex-wrap: wrap;
+  }
+
+  .tab-item {
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  /* Adjust form elements */
+  input, select, textarea {
+    width: 100%;
+  }
+
+  .collection-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .collection-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* Request items in collections */
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 } 

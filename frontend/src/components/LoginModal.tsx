@@ -7,37 +7,11 @@ interface LoginModalProps {
   onLoginSuccess?: () => void;
 }
 
-async function loginUser(email: string, password: string, rememberMe: boolean, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) {
-  try {
-    const response = await axios.post("http://localhost:5000/api/login", {
-      email,
-      password,
-    });
-
-    if (rememberMe) {
-      localStorage.setItem("user", JSON.stringify({ email }));
-    } else {
-      localStorage.removeItem("user");
-    }
-
-    // handle successful login (store token, redirect, etc.)
-    console.log("Login success:", response.data);
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ email, token: response.data.token })
-    );
-  } catch (error) {
-    console.error("Login error:", error);
-    // handle error (show message, etc.)
-  }
-
-}
-
 const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
@@ -61,46 +35,96 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSucce
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
       setIsLoading(true);
       
-      // Simulate API call
-      setTimeout(() => {
-        setIsLoading(false);
+      try {
+        // Make actual API call
+        const response = await axios.post("http://localhost:5000/api/login", {
+          email,
+          password,
+        });
 
-        console.log('Login submitted:', { email, password, rememberMe });
+        // Store user information
+        const userData = {
+          email,
+          token: response.data.token
+        };
         
-        // // Call the success callback
+        // Handle remember me functionality
+        if (rememberMe) {
+          localStorage.setItem("user", JSON.stringify(userData));
+        } else {
+          sessionStorage.setItem("user", JSON.stringify(userData));
+        }
+
+        console.log("Login success:", response.data);
         
-        loginUser(email, password, rememberMe, setIsLoading);
-        
+        // Call the success callback to trigger redirect
         if (onLoginSuccess) {
           onLoginSuccess();
         }
+        
         // Close modal after successful login
         onClose();
-      }, 1500);
+      } catch (error) {
+        console.error("Login error:", error);
+        setErrors({
+          form: 'Invalid email or password. Please try again.'
+        });
+        setIsLoading(false);
+      }
     }
   };
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
-    if (savedUser?.token) {
-      setEmail(savedUser.email);
-      console.log("User is already logged in");
-      if (onLoginSuccess) {
-        onLoginSuccess();
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
+    
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser);
+        if (userData?.token) {
+          setEmail(userData.email || '');
+          console.log("User is already logged in");
+          
+          // If already logged in, trigger success callback
+          if (onLoginSuccess) {
+            onLoginSuccess();
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing saved user data", error);
       }
     }
-  }, []);
+    
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      // Re-enable body scrolling when modal is closed
+      document.body.style.overflow = 'auto';
+    };
+  }, [onLoginSuccess]);
+
+  // Handle modal click outside to close
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={handleModalClick}>
       <div className="modal-content login-modal">
-        <button className="modal-close" onClick={onClose}>×</button>
+        <button 
+          className="modal-close" 
+          onClick={onClose}
+          aria-label="Close login modal"
+        >×</button>
         
         <div className="modal-header">
           <div className="modal-logo">
@@ -116,6 +140,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSucce
         </div>
         
         <form onSubmit={handleSubmit}>
+          {errors.form && (
+            <div className="form-error-message">{errors.form}</div>
+          )}
+          
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -125,6 +153,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSucce
               onChange={(e) => setEmail(e.target.value)}
               className={errors.email ? 'error' : ''}
               placeholder="Enter your email"
+              autoComplete="email"
             />
             {errors.email && <div className="error-message">{errors.email}</div>}
           </div>
@@ -138,6 +167,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSucce
               onChange={(e) => setPassword(e.target.value)}
               className={errors.password ? 'error' : ''}
               placeholder="Enter your password"
+              autoComplete="current-password"
             />
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
@@ -182,4 +212,4 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSignup, onLoginSucce
   );
 };
 
-export default LoginModal; 
+export default LoginModal;

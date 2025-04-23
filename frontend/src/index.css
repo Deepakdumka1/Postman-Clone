@@ -1,8 +1,21 @@
+/* Default to light theme colors */
 :root {
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --secondary-color: #0ea5e9;
-  --secondary-hover: #0284c7;
+  /* Light theme colors */
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary-color: #6366f1;
+  --accent-color: #8b5cf6;
+  
+  --light-text: #0f172a;
+  --dark-text: #f8fafc;
+  --muted-text: #475569;
+  
+  --border-color: #cbd5e1;
+  --bg-dark: #f8fafc;
+  --bg-darker: #e2e8f0;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card-hover: rgba(241, 245, 249, 0.9);
+  --shadow-color: rgba(0, 0, 0, 0.1);
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
@@ -13,10 +26,44 @@
   --dark-surface: #0f172a;
   --light-border: #e2e8f0;
   --dark-border: #334155;
-  --light-text: #334155;
-  --dark-text: #f1f5f9;
   --light-text-secondary: #64748b;
-  --dark-text-secondary: #94a3b8;
+  --dark-text-secondary: #cdd4de;
+  --box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+}
+
+/* Dark theme via class */
+.dark-theme {
+  --primary-color: #6366f1;
+  --primary-hover: #818cf8;
+  --secondary-color: #4f46e5;
+  --accent-color: #8b5cf6;
+  
+  --light-text: #f8fafc;
+  --dark-text: #0f172a;
+  --muted-text: #94a3b8;
+  
+  --border-color: #334155;
+  --bg-dark: #0f172a;
+  --bg-darker: #020617;
+  --bg-card: rgba(15, 23, 42, 0.8);
+  --bg-card-hover: rgba(30, 41, 59, 0.9);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --light-bg: #f8fafc;
+  --dark-bg: #1e293b;
+  --light-surface: #ffffff;
+  --dark-surface: #0f172a;
+  --light-border: #e2e8f0;
+  --dark-border: #334155;
+  --light-text-secondary: #64748b;
+  --dark-text-secondary: #cdd4de;
   --box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --radius-sm: 0.25rem;
@@ -26,16 +73,23 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--light-bg);
+  background-color: var(--bg-dark);
   color: var(--light-text);
 }
 
+/* Make sure global background and text color changes with theme */
+html, body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 code {
-  font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 /* Layout */
@@ -132,7 +186,7 @@ input:focus, select:focus, textarea:focus {
   text-align: center;
   color: var(--light-text-secondary);
   font-style: normal;
-  background-color: var(--light-surface);
+  background-color: rgb(29, 27, 27);
   border-radius: var(--radius-lg);
   border: 1px dashed var(--light-border);
   display: flex;
@@ -710,89 +764,6 @@ input:focus, select:focus, textarea:focus {
     border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
-  }
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-  }
-  
-  button {
-    background-color: #333;
-    color: #e0e0e0;
-  }
-  
-  button:hover {
-    background-color: #444;
-  }
-  
-  button.send-button, button.save-button, button.create-button {
-    background-color: #007acc;
-  }
-  
-  button.send-button:hover, button.save-button:hover, button.create-button:hover {
-    background-color: #0069b3;
-  }
-  
-  input, select, textarea {
-    background-color: #333;
-    border-color: #555;
-    color: #e0e0e0;
-  }
-  
-  .empty-state {
-    background-color: #2d2d2d;
-    color: #999;
-  }
-  
-  .tab-button:hover, .response-tab:hover {
-    background-color: #2d2d2d;
-  }
-  
-  .key-value-editor th, .key-value-editor td,
-  .details-table th, .details-table td,
-  .variables-table th, .variables-table td {
-    border-color: #444;
-  }
-  
-  .response-panel {
-    border-color: #444;
-  }
-  
-  .response-header {
-    background-color: #2d2d2d;
-    border-color: #444;
-  }
-  
-  .response-body.json {
-    color: #e0e0e0;
-  }
-  
-  .collection-header, .environment-item, .request-url {
-    background-color: #2d2d2d;
-  }
-  
-  .request-item:hover {
-    background-color: #2d2d2d;
-  }
-  
-  .request-item.selected, .history-item.selected {
-    background-color: #103656;
-  }
-  
-  .body-preview {
-    background-color: #2d2d2d;
-  }
-  
-  .help-text {
-    background-color: #103656;
-  }
-  
-  .history-item:hover {
-    background-color: #2d2d2d;
   }
 }
 

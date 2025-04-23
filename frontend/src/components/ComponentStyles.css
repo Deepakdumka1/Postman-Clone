@@ -1073,7 +1073,7 @@
   margin: 0;
   font-weight: 600;
   font-size: 1.1rem;
-  color: var(--text-primary);
+  color: var(--light-text);
 }
 
 .save-request-inputs {
